@@ -1,48 +1,24 @@
-import { Toaster } from "@/components/ui/toaster"
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import PageNotFound from './lib/PageNotFound';
-import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { Toaster } from "@/components/ui/toaster";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClientInstance } from "@/lib/query-client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import Home from '@/pages/Home';
-import AppLayout from '@/components/layout/AppLayout';
-import Dashboard from '@/pages/Dashboard';
-import Competitors from '@/pages/Competitors';
-import CompetitorDetail from '@/pages/CompetitorDetail';
-import Alerts from '@/pages/Alerts';
-import Insights from '@/pages/Insights';
-import Settings from '@/pages/Settings';
+import { AuthProvider } from "@/lib/AuthContext";
 
-// Protects /dashboard/* — redirects to home if not authenticated
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+import PageNotFound from "./lib/PageNotFound";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
 
-  if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <span className="text-sm text-muted-foreground font-medium">Carregando RivalWatch...</span>
-        </div>
-      </div>
-    );
-  }
+import AppLayout from "@/components/layout/AppLayout";
 
-  if (authError?.type === 'user_not_registered') return <UserNotRegisteredError />;
-  if (authError?.type === 'auth_required') {
-    navigateToLogin();
-    return null;
-  }
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-  if (!isAuthenticated) {
-    navigateToLogin();
-    return null;
-  }
-
-  return children;
-};
+import Dashboard from "@/pages/Dashboard";
+import Competitors from "@/pages/Competitors";
+import CompetitorDetail from "@/pages/CompetitorDetail";
+import Alerts from "@/pages/Alerts";
+import Insights from "@/pages/Insights";
+import Settings from "@/pages/Settings";
 
 function App() {
   return (
@@ -50,69 +26,37 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <Routes>
-            {/* Public landing page */}
+
+            {/* PUBLIC ROUTES */}
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
 
-            {/* Protected app routes under /dashboard */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Dashboard />} />
+            {/* PROTECTED ROUTES */}
+            <Route element={<ProtectedRoute />}>
+              
+              <Route element={<AppLayout />}>
+                
+                <Route path="/dashboard" element={<Dashboard />} />
+
+                <Route path="/competitors" element={<Competitors />} />
+                <Route path="/competitors/:id" element={<CompetitorDetail />} />
+
+                <Route path="/alerts" element={<Alerts />} />
+
+                <Route path="/insights" element={<Insights />} />
+
+                <Route path="/settings" element={<Settings />} />
+
+              </Route>
+
             </Route>
 
-            <Route
-              path="/competitors"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Competitors />} />
-              <Route path=":id" element={<CompetitorDetail />} />
-            </Route>
-
-            <Route
-              path="/alerts"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Alerts />} />
-            </Route>
-
-            <Route
-              path="/insights"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Insights />} />
-            </Route>
-
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Settings />} />
-            </Route>
-
+            {/* 404 */}
             <Route path="*" element={<PageNotFound />} />
+
           </Routes>
         </Router>
+
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
