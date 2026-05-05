@@ -1,0 +1,51 @@
+{
+  "name": "AIInsight",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "T\u00edtulo do insight"
+    },
+    "content": {
+      "type": "string",
+      "description": "Conte\u00fado completo do insight (markdown)"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Resumo curto do insight"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "trend_analysis",
+        "price_suggestion",
+        "competitor_summary",
+        "market_overview"
+      ],
+      "description": "Tipo de insight"
+    },
+    "competitors_analyzed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs dos concorrentes analisados"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista de recomenda\u00e7\u00f5es"
+    },
+    "confidence_score": {
+      "type": "number",
+      "description": "Score de confian\u00e7a (0-100)"
+    }
+  },
+  "required": [
+    "title",
+    "content",
+    "type"
+  ]
+}

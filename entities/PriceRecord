@@ -1,0 +1,39 @@
+{
+  "name": "PriceRecord",
+  "type": "object",
+  "properties": {
+    "competitor_id": {
+      "type": "string",
+      "description": "ID do concorrente"
+    },
+    "price": {
+      "type": "number",
+      "description": "Pre\u00e7o registrado"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "BRL",
+        "USD",
+        "EUR"
+      ],
+      "default": "BRL"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Nome do produto"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "URL de onde o pre\u00e7o foi extra\u00eddo"
+    },
+    "extracted_data": {
+      "type": "string",
+      "description": "Dados brutos extra\u00eddos (JSON string)"
+    }
+  },
+  "required": [
+    "competitor_id",
+    "price"
+  ]
+}

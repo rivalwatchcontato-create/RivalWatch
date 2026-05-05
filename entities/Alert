@@ -1,0 +1,64 @@
+{
+  "name": "Alert",
+  "type": "object",
+  "properties": {
+    "competitor_id": {
+      "type": "string",
+      "description": "ID do concorrente"
+    },
+    "competitor_name": {
+      "type": "string",
+      "description": "Nome do concorrente"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Nome do produto"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "price_drop",
+        "price_increase",
+        "product_unavailable",
+        "new_competitor",
+        "ai_insight"
+      ],
+      "description": "Tipo do alerta"
+    },
+    "message": {
+      "type": "string",
+      "description": "Mensagem do alerta"
+    },
+    "old_price": {
+      "type": "number",
+      "description": "Pre\u00e7o anterior"
+    },
+    "new_price": {
+      "type": "number",
+      "description": "Pre\u00e7o novo"
+    },
+    "change_percent": {
+      "type": "number",
+      "description": "Percentual de mudan\u00e7a"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se o alerta foi lido"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    }
+  },
+  "required": [
+    "type",
+    "message"
+  ]
+}
